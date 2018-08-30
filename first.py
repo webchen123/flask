@@ -1,4 +1,5 @@
 from flask import Flask,render_template,request
+from werkzeug import secure_filename
 app = Flask(__name__)
 @app.route('/hello/')
 @app.route('/hello/<name>')
@@ -13,6 +14,11 @@ def login():
         else:
             error = 'Ivalid username/password'
     return render_template('login.html',error=error)
+@app.route('/upload',methods=['POST','GET'])
+def upload_flie():
+    if request.method=="POST":
+        f = request.files['the_file']
+        f.save('./static'+ secure_filename(f.filename))
 def log_the_user_in(name):
     return render_template('hello.html',name=name)
 def valid_login(name,password):
